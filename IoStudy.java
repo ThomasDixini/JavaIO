@@ -11,6 +11,8 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.BasicFileAttributeView;
+import java.nio.file.attribute.BasicFileAttributes;
 
 /**
  * IoStudy
@@ -58,9 +60,38 @@ public class IoStudy {
         } catch (Exception e) {
             System.err.println(e);
         }*/
-        Path link = Paths.get("C:\\Users\\ThomásDixini\\Documents\\Dev\\afundo_java\\link");
+        /*Path link = Paths.get("C:\\Users\\ThomásDixini\\Documents\\Dev\\afundo_java\\link");
         Path target = Paths.get("C:\\Users\\ThomásDixini\\Documents\\Dev\\afundo_java\\directory\\arquivo2.txt");
         Files.createSymbolicLink(link, target);
         System.out.println("É um link simbolico: " + Files.isSymbolicLink(link) + " e seu arquivo é: " + Files.readSymbolicLink(link));
+        */
+        Path dir = Paths.get(".\\teste");
+        if (!Files.exists(dir)) {
+            Files.createDirectory(dir);
+            System.out.println("Created");
+        } else {
+            Path arq = Paths.get(".\\teste\\arquivoTeste.txt");
+            
+            System.out.println(arq);
+            BasicFileAttributes attr = Files.readAttributes(arq, BasicFileAttributes.class);
+            System.out.printf("######################################### \n");
+            System.out.printf("Seu tamanho é: %s \n", attr.size());
+            System.out.printf("Ultima vez modificado " + attr.lastModifiedTime() + "\n");
+            System.out.printf("Sua fileKey " +  attr.fileKey() + "\n");
+            System.out.printf("Tempo de criação " +  attr.creationTime() + "\n");
+            System.out.printf("É um arquivo regular? " + attr.isRegularFile() + "\n");
+            System.out.printf("######################################### \n");
+
+            Iterable<FileStore> stores = arq.getFileSystem().getFileStores();
+            for(FileStore s: stores){
+                System.out.println(s.getTotalSpace() / 1024 / 1024 / 1024);
+                System.out.println(s.getUnallocatedSpace() / 1024 / 1024 / 1024);
+                System.out.println((s.getTotalSpace() - s.getUnallocatedSpace()) / 1024 / 1024 / 1024);
+                System.out.println(s.type());
+                System.out.println(s.name().toString());
+                System.out.println(s.isReadOnly());
+            }
+            
+        }
     }
 }
