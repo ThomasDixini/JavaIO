@@ -95,8 +95,16 @@ public class IoStudy {
             
         }*/
 
-        DirectoryStream<Path> streamPath = Files.newDirectoryStream(Paths.get("C:\\Users\\ThomásDixini\\Documents\\Dev\\afundo_java\\teste"), "su*");
+        /*DirectoryStream<Path> streamPath = Files.newDirectoryStream(Paths.get("C:\\Users\\ThomásDixini\\Documents\\Dev\\afundo_java\\teste"), "su*");
         streamPath.forEach(s -> System.out.println(s.getFileName()));
-        streamPath.close();
+        streamPath.close();*/
+        /*Path initialPath = Paths.get("C:\\Users\\ThomásDixini\\Documents\\Dev\\afundo_java\\teste");
+        PrintFiles pf = new PrintFiles();
+        Files.walkFileTree(initialPath, pf);*/
+        DirectoryStream<Path> stream =  Files.newDirectoryStream(Paths.get("C:\\Users\\ThomásDixini\\Documents\\Dev\\afundo_java\\teste"));
+        stream.forEach(s -> System.out.println(s.getFileName()));
+        stream.close();
     }
 }
+
+
