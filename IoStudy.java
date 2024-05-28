@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.CopyOption;
+import java.nio.file.DirectoryStream;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.FileStore;
 import java.nio.file.FileSystem;
@@ -65,7 +66,7 @@ public class IoStudy {
         Files.createSymbolicLink(link, target);
         System.out.println("É um link simbolico: " + Files.isSymbolicLink(link) + " e seu arquivo é: " + Files.readSymbolicLink(link));
         */
-        Path dir = Paths.get(".\\teste");
+        /*Path dir = Paths.get(".\\teste");
         if (!Files.exists(dir)) {
             Files.createDirectory(dir);
             System.out.println("Created");
@@ -92,6 +93,10 @@ public class IoStudy {
                 System.out.println(s.isReadOnly());
             }
             
-        }
+        }*/
+
+        DirectoryStream<Path> streamPath = Files.newDirectoryStream(Paths.get("C:\\Users\\ThomásDixini\\Documents\\Dev\\afundo_java\\teste"), "su*");
+        streamPath.forEach(s -> System.out.println(s.getFileName()));
+        streamPath.close();
     }
 }
