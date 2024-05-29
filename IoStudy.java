@@ -14,6 +14,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributeView;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.List;
 
 /**
  * IoStudy
@@ -101,9 +102,21 @@ public class IoStudy {
         /*Path initialPath = Paths.get("C:\\Users\\ThomásDixini\\Documents\\Dev\\afundo_java\\teste");
         PrintFiles pf = new PrintFiles();
         Files.walkFileTree(initialPath, pf);*/
-        DirectoryStream<Path> stream =  Files.newDirectoryStream(Paths.get("C:\\Users\\ThomásDixini\\Documents\\Dev\\afundo_java\\teste"));
+        /*DirectoryStream<Path> stream =  Files.newDirectoryStream(Paths.get("C:\\Users\\ThomásDixini\\Documents\\Dev\\afundo_java\\teste"));
         stream.forEach(s -> System.out.println(s.getFileName()));
-        stream.close();
+        stream.close();*/
+
+        try {
+            Path path =Paths.get("C:\\Users\\ThomásDixini\\Documents\\Dev\\afundo_java\\teste\\arquivoTeste.txt");
+            byte[] fileArray;
+            List<String> fileStrings;
+            fileArray = Files.readAllBytes(path);
+            fileStrings = Files.readAllLines(path);
+            System.out.println(fileArray);
+            System.out.println(fileStrings);
+        } catch(IOException e) {
+            System.err.println(e.getMessage());
+        }
     }
 }
 
