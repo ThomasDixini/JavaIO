@@ -1,5 +1,9 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.nio.file.CopyOption;
 import java.nio.file.DirectoryStream;
@@ -15,6 +19,7 @@ import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributeView;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * IoStudy
@@ -106,7 +111,7 @@ public class IoStudy {
         stream.forEach(s -> System.out.println(s.getFileName()));
         stream.close();*/
 
-        try {
+        /*try {
             Path path =Paths.get("C:\\Users\\ThomásDixini\\Documents\\Dev\\afundo_java\\teste\\arquivoTeste.txt");
             byte[] fileArray;
             List<String> fileStrings;
@@ -116,6 +121,14 @@ public class IoStudy {
             System.out.println(fileStrings);
         } catch(IOException e) {
             System.err.println(e.getMessage());
+        }*/
+        Path path = Path.of("directory\\arquivo2.txt");
+
+        try (InputStream in = Files.newInputStream(path)) {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            System.out.println(reader.readLine());
+        } catch(IOException e) {
+            System.err.println("Houve algum erro");
         }
     }
 }
