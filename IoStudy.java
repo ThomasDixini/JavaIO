@@ -1,10 +1,13 @@
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.lang.reflect.Array;
 import java.net.URI;
 import java.nio.channels.SeekableByteChannel;
 import java.nio.file.CopyOption;
@@ -21,6 +24,7 @@ import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.BasicFileAttributeView;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -126,7 +130,7 @@ public class IoStudy {
         } catch(IOException e) {
             System.err.println(e.getMessage());
         }*/
-        String message = """
+        /*String message = """
             EStá é uma bela canção de Betoven
         """;
         String text = null;
@@ -139,9 +143,30 @@ public class IoStudy {
             text = stream.collect(Collectors.joining("\n"));
         } catch(IOException e ){
             System.err.println(e);
+        }*/
+        Path path = Paths.get("./ints.bin");
+        int[] ints = {1,2,3,4,5,6};
+        try(var outputStream = Files.newOutputStream(path)) {
+            var writer = new DataOutputStream(outputStream);
+            for(int i : ints) {
+                writer.writeInt(i);
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
         }
 
-       System.out.println(text);
+        int[] arrayInt = new int[6];
+        try(var in = Files.newInputStream(path)) {
+            var reader = new DataInputStream(in);
+            for(int index = 0; index < arrayInt.length; index++) {
+                arrayInt[index] = reader.readInt();
+            }
+
+            System.out.println("ints: " + Arrays.toString(arrayInt));
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+       
     }
 }
 
