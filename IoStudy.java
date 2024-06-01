@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.URI;
+import java.nio.channels.SeekableByteChannel;
 import java.nio.file.CopyOption;
 import java.nio.file.DirectoryStream;
 import java.nio.file.FileAlreadyExistsException;
@@ -16,9 +18,11 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.BasicFileAttributeView;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -122,14 +126,22 @@ public class IoStudy {
         } catch(IOException e) {
             System.err.println(e.getMessage());
         }*/
-        Path path = Path.of("directory\\arquivo2.txt");
+        String message = """
+            EStá é uma bela canção de Betoven
+        """;
+        String text = null;
+        Path path = Paths.get("directory/arquivo2.txt");
+        try( var in = Files.newInputStream(path)) {
+            var reader = new InputStreamReader(in);
+            BufferedReader buff = new BufferedReader(reader);
+            Stream<String> stream = buff.lines();
 
-        try (InputStream in = Files.newInputStream(path)) {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-            System.out.println(reader.readLine());
-        } catch(IOException e) {
-            System.err.println("Houve algum erro");
+            text = stream.collect(Collectors.joining("\n"));
+        } catch(IOException e ){
+            System.err.println(e);
         }
+
+       System.out.println(text);
     }
 }
 
