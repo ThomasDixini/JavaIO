@@ -9,6 +9,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Array;
 import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.channels.SeekableByteChannel;
 import java.nio.file.CopyOption;
 import java.nio.file.DirectoryStream;
@@ -24,6 +27,7 @@ import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.BasicFileAttributeView;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,7 +37,7 @@ import java.util.stream.Stream;
  * IoStudy
  */
 public class IoStudy {
-    public static void main(String[] args) throws IOException, NoSuchFileException, FileAlreadyExistsException {
+    public static void main(String[] args) throws IOException, NoSuchFileException, FileAlreadyExistsException, InterruptedException {
 
         /*File file = new File("C:\\Users\\ThomásDixini\\Documents\\Dev\\afundo_java\\diretorio_teste");
         System.out.printf(
@@ -144,7 +148,7 @@ public class IoStudy {
         } catch(IOException e ){
             System.err.println(e);
         }*/
-        Path path = Paths.get("./ints.bin");
+        /*Path path = Paths.get("./ints.bin");
         int[] ints = {1,2,3,4,5,6};
         try(var outputStream = Files.newOutputStream(path)) {
             var writer = new DataOutputStream(outputStream);
@@ -165,8 +169,31 @@ public class IoStudy {
             System.out.println("ints: " + Arrays.toString(arrayInt));
         } catch (Exception e) {
             // TODO: handle exception
+        }*/
+       URI sonnetsURI = URI.create("https://www.gutenberg.org/cache/epub/1041/pg1041.txt");
+        HttpRequest request =
+                HttpRequest.newBuilder(sonnetsURI)
+                        .GET()
+                        .build();
+        HttpClient client =
+                HttpClient.newBuilder().build();
+        HttpResponse<InputStream> response = client.send(request, HttpResponse.BodyHandlers.ofInputStream());
+        InputStream inputStream = response.body();
+
+        int start = 33;
+        List<Sonnet> sonnets = new ArrayList<>();
+        try(var reader = new SonnetReader(inputStream)) {
+            reader.skipLines(start);
+            Sonnet sonnet = reader.readNextSonnet();
+            while (sonnet != null) {
+                sonnets.add(sonnet);
+                sonnet = reader.readNextSonnet();
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
         }
-       
+
+        System.out.println("# sonnets = " + sonnets.size());
     }
 }
 
